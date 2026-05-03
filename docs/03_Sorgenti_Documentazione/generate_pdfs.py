@@ -258,7 +258,7 @@ def build_presentation():
             "bullets": [
                 "Landing page commerciale con CTA, coupon e raccolta lead.",
                 "Checkout Stripe test o reale, con bypass locale opzionale.",
-                "Area riservata cliente con accesso via mail e sessione protetta.",
+                "Area riservata cliente con accesso via email + password e fallback via mail.",
                 "Dashboard admin per lead, ordini, email e statistiche.",
                 "Sincronizzazione opzionale con Google Sheets per Leads, Orders e Tracking.",
             ],
@@ -285,7 +285,7 @@ def build_presentation():
                 "Frontend e backend avviabili in locale su 127.0.0.1.",
                 "Google Sheets collegato e verificato sul tab Leads.",
                 "Login admin con email + password e protezioni anti brute-force.",
-                "Area riservata con magic link monouso e logout reale.",
+                "Area riservata con login cliente email + password, fallback via magic link e logout reale.",
                 "Pulsanti test presenti solo in locale e disattivabili per la condivisione finale.",
             ],
         },
@@ -342,6 +342,7 @@ def build_user_manual():
             "title": "3. Acquisto e modalita test",
             "intro": "Puoi usare sia il checkout Stripe test sia il bypass locale di sviluppo.",
             "bullets": [
+                "Prima dell'acquisto il cliente inserisce email e password che usera poi nell'area riservata.",
                 "Acquista ora apre Stripe test quando la configurazione e attiva.",
                 "Bypass pagamento (test) crea un ordine pagato senza passare da Stripe.",
                 "Dopo il pagamento arrivi alla pagina Success e poi alla pagina download.",
@@ -351,9 +352,10 @@ def build_user_manual():
             "title": "4. Area riservata cliente",
             "intro": "L'area riservata serve per vedere gli ordini e scaricare le guide acquistate.",
             "bullets": [
-                "Inserisci l'email usata nell'acquisto per ricevere il magic link.",
+                "Inserisci email e password scelte durante l'acquisto per entrare direttamente.",
+                "Se il servizio email e attivo, puoi comunque richiedere un link monouso come fallback.",
                 "In locale puoi usare Accedi in test se il flag di test e attivo.",
-                "Il token di accesso non resta in URL e puoi chiudere la sessione con Esci.",
+                "Dopo il login ottieni una sessione protetta e puoi chiuderla con Esci.",
             ],
         },
         {
@@ -462,7 +464,7 @@ def build_startup_sheet():
                 "Compila un lead di prova dal form Estratto gratuito.",
                 "Controlla Leads in admin e nel Google Sheet.",
                 "Se stai testando la vendita, usa Acquista ora o Bypass pagamento (test).",
-                "Controlla area riservata, download e tab Email.",
+                "Controlla area riservata con email + password, download e tab Email.",
             ],
         },
     ]
@@ -533,7 +535,7 @@ def build_launch_manual():
                 "Landing corretta su desktop e mobile.",
                 "Lead salvati su database e Google Sheets.",
                 "Checkout reale con Stripe live o test controllato.",
-                "Magic link area riservata funzionante.",
+                "Login area riservata con email + password funzionante, con eventuale fallback email.",
                 "Download PDF senza errori.",
                 "Dashboard admin raggiungibile e protetta.",
                 "Pulsanti test non visibili in produzione.",
