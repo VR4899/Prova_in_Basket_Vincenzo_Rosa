@@ -150,6 +150,7 @@ class CheckoutRequest(BaseModel):
     package_id: str
     origin_url: str
     email: Optional[EmailStr] = None
+    password: Optional[str] = Field(default=None, min_length=8, max_length=128)
     coupon: Optional[str] = None
 
 
@@ -187,6 +188,11 @@ class CustomerAccessRequest(BaseModel):
     email: EmailStr
 
 
+class CustomerPasswordLoginRequest(BaseModel):
+    email: EmailStr
+    password: str = Field(..., min_length=8, max_length=128)
+
+
 class CustomerSessionExchangeRequest(BaseModel):
     token: str = Field(..., min_length=12, max_length=512)
 
@@ -215,8 +221,23 @@ def _constant_time_eq(left: str, right: str) -> bool:
     return hmac.compare_digest((left or "").encode("utf-8"), (right or "").encode("utf-8"))
 
 
+def _normalize_email(value: Optional[str]) -> str:
+    return (value or "").strip().lower()
+
+
 def _hash_token(token: str) -> str:
     return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+def _hash_pbkdf2_password(password: str, iterations: int = 390000) -> str:
+    salt = secrets.token_hex(16)
+    derived = hashlib.pbkdf2_hmac(
+        "sha256",
+        password.encode("utf-8"),
+        salt.encode("utf-8"),
+        iterations,
+    ).hex()
+    return f"pbkdf2_sha256${iterations}${salt}${derived}"
 
 
 def _verify_pbkdf2_hash(password: str, stored_hash: str) -> bool:
@@ -241,6 +262,77 @@ def _admin_password_matches(password: str) -> bool:
     if ADMIN_PASSWORD_HASH:
         return _verify_pbkdf2_hash(password, ADMIN_PASSWORD_HASH)
     return _constant_time_eq(password, ADMIN_PASSWORD)
+
+
+async def _find_customer_account(email: str) -> Optional[Dict]:
+    return await db.customer_accounts.find_one({"email": _normalize_email(email)}, {"_id": 0})
+
+
+async def _ensure_customer_account(email: str, password: str) -> Dict:
+    normalized_email = _normalize_email(email)
+    raw_password = (password or "").strip()
+    if not normalized_email or not raw_password:
+        raise HTTPException(
+            status_code=400,
+            detail="Inserisci email e password per creare il tuo accesso cliente.",
+        )
+
+    now_iso = _now_iso()
+    account = await _find_customer_account(normalized_email)
+    if account:
+        stored_hash = (account.get("password_hash") or "").strip()
+        if stored_hash and not _verify_pbkdf2_hash(raw_password, stored_hash):
+            raise HTTPException(
+                status_code=401,
+                detail="Questa email è gia registrata. Usa la password corretta per continuare.",
+            )
+
+        password_hash = stored_hash or _hash_pbkdf2_password(raw_password)
+        await db.customer_accounts.update_one(
+            {"email": normalized_email},
+            {"$set": {
+                "password_hash": password_hash,
+                "updated_at": now_iso,
+                "last_checkout_at": now_iso,
+            }},
+        )
+        return {
+            **account,
+            "email": normalized_email,
+            "password_hash": password_hash,
+            "updated_at": now_iso,
+            "last_checkout_at": now_iso,
+        }
+
+    account_doc = {
+        "id": str(uuid.uuid4()),
+        "email": normalized_email,
+        "password_hash": _hash_pbkdf2_password(raw_password),
+        "created_at": now_iso,
+        "updated_at": now_iso,
+        "last_checkout_at": now_iso,
+    }
+    await db.customer_accounts.insert_one(account_doc)
+    return account_doc
+
+
+async def _authenticate_customer_account(email: str, password: str) -> Dict:
+    normalized_email = _normalize_email(email)
+    raw_password = (password or "").strip()
+    account = await _find_customer_account(normalized_email)
+    if not account:
+        raise HTTPException(status_code=401, detail="Credenziali non valide.")
+
+    stored_hash = (account.get("password_hash") or "").strip()
+    if not stored_hash or not _verify_pbkdf2_hash(raw_password, stored_hash):
+        raise HTTPException(status_code=401, detail="Credenziali non valide.")
+
+    now_iso = _now_iso()
+    await db.customer_accounts.update_one(
+        {"email": normalized_email},
+        {"$set": {"updated_at": now_iso, "last_login_at": now_iso}},
+    )
+    return {**account, "email": normalized_email, "updated_at": now_iso, "last_login_at": now_iso}
 
 
 def _client_ip(request: Request) -> str:
@@ -657,6 +749,19 @@ async def _create_customer_session(token_doc: Dict) -> Dict:
     return {"token": raw_session_token, "expires_at": expires_at, "doc": session_doc}
 
 
+async def _create_customer_session_for_email(
+    email: str,
+    *,
+    mode: str = "password_login",
+    session_ids: Optional[List[str]] = None,
+) -> Dict:
+    return await _create_customer_session({
+        "email": _normalize_email(email),
+        "mode": mode,
+        "session_ids": session_ids or [],
+    })
+
+
 async def _get_customer_session(raw_token: Optional[str]) -> Optional[Dict]:
     if not raw_token:
         return None
@@ -847,7 +952,17 @@ async def check_coupon(code: str):
 # ----------- Checkout -----------
 @api_router.post("/checkout/session", response_model=CheckoutResponse)
 async def create_checkout_session(payload: CheckoutRequest, request: Request):
-    pkg, final_amount, discount, coupon_used, origin, metadata = await _resolve_checkout(payload)
+    buyer_email = _normalize_email(payload.email)
+    buyer_password = (payload.password or "").strip()
+
+    normalized_payload = CheckoutRequest(
+        package_id=payload.package_id,
+        origin_url=payload.origin_url,
+        email=buyer_email,
+        coupon=payload.coupon,
+    )
+    pkg, final_amount, discount, coupon_used, origin, metadata = await _resolve_checkout(normalized_payload)
+    await _ensure_customer_account(buyer_email, buyer_password)
     success_url = f"{origin}/success?session_id={{CHECKOUT_SESSION_ID}}"
     cancel_url = f"{origin}/?cancelled=true"
 
@@ -867,7 +982,7 @@ async def create_checkout_session(payload: CheckoutRequest, request: Request):
         "package_id": payload.package_id, "package_name": pkg["name"],
         "amount": final_amount, "discount": discount,
         "coupon": coupon_used, "currency": pkg["currency"],
-        "email": payload.email, "metadata": metadata,
+        "email": buyer_email, "metadata": metadata,
         "origin_url": origin,
         "status": "initiated", "payment_status": "unpaid",
         "emails_sent": False,
@@ -880,7 +995,7 @@ async def create_checkout_session(payload: CheckoutRequest, request: Request):
         "order",
         session.session_id,
         session_id=session.session_id,
-        email=payload.email or "",
+        email=buyer_email,
         package_id=payload.package_id,
         amount=final_amount,
         status="initiated",
@@ -904,7 +1019,17 @@ async def create_test_bypass_checkout(payload: CheckoutRequest, request: Request
     if TEST_BYPASS_LOCAL_ONLY and not _is_local_request(request):
         raise HTTPException(status_code=403, detail="Bypass test consentito solo in locale")
 
-    pkg, final_amount, discount, coupon_used, origin, metadata = await _resolve_checkout(payload)
+    buyer_email = _normalize_email(payload.email)
+    buyer_password = (payload.password or "").strip()
+
+    normalized_payload = CheckoutRequest(
+        package_id=payload.package_id,
+        origin_url=payload.origin_url,
+        email=buyer_email,
+        coupon=payload.coupon,
+    )
+    pkg, final_amount, discount, coupon_used, origin, metadata = await _resolve_checkout(normalized_payload)
+    await _ensure_customer_account(buyer_email, buyer_password)
     session_id = f"cs_bypass_{uuid.uuid4().hex[:20]}"
     amount_total = int(round(final_amount * 100))
 
@@ -918,7 +1043,7 @@ async def create_test_bypass_checkout(payload: CheckoutRequest, request: Request
         "discount": discount,
         "coupon": coupon_used,
         "currency": pkg["currency"],
-        "email": payload.email,
+        "email": buyer_email,
         "metadata": {**metadata, "test_bypass": "true"},
         "origin_url": origin,
         "status": "complete",
@@ -934,7 +1059,7 @@ async def create_test_bypass_checkout(payload: CheckoutRequest, request: Request
         "order",
         session_id,
         session_id=session_id,
-        email=payload.email or "",
+        email=buyer_email,
         package_id=payload.package_id,
         amount=final_amount,
         status="complete",
@@ -1471,9 +1596,36 @@ async def admin_email_send_now(email_id: str, x_admin_token: Optional[str] = Hea
 
 
 # ----------- Customer Area (magic link) -----------
+@api_router.post("/customer/login")
+async def customer_password_login(payload: CustomerPasswordLoginRequest):
+    email = _normalize_email(payload.email)
+    await _authenticate_customer_account(email, payload.password)
+    paid_orders = await db.payment_transactions.count_documents(
+        {"email": email, "payment_status": "paid"}
+    )
+
+    session_payload = await _create_customer_session_for_email(email, mode="password_login")
+    await _track_sheet_event(
+        "customer_session_started",
+        "customer_access",
+        session_payload["doc"]["id"],
+        email=email,
+        status="active",
+        source="customer_area",
+        note="Sessione cliente aperta da login email e password",
+        metadata={"mode": "password_login", "paid_orders": paid_orders},
+        created_at=_now_iso(),
+    )
+    return {
+        "ok": True,
+        "token": session_payload["token"],
+        "expires_at": session_payload["expires_at"],
+    }
+
+
 @api_router.post("/customer/request-access")
 async def request_customer_access(payload: CustomerAccessRequest, request: Request):
-    email = payload.email.lower().strip()
+    email = _normalize_email(payload.email)
     ip_address = _client_ip(request)
     rate_limited = await _is_customer_access_rate_limited(ip_address)
     await _register_customer_access_attempt(ip_address, email)

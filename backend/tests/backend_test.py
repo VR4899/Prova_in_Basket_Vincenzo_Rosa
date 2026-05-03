@@ -73,26 +73,53 @@ def test_lead_generates_coupon_and_validates():
 
 # ---------- Checkout ----------
 def test_checkout_invalid_pkg():
-    r = S.post(f"{BASE}/api/checkout/session", json={"package_id": "xxx", "origin_url": "https://example.com"})
+    r = S.post(
+        f"{BASE}/api/checkout/session",
+        json={
+            "package_id": "xxx",
+            "origin_url": "https://example.com",
+            "email": "invalid_pkg@example.com",
+            "password": "Password123!",
+        },
+    )
     assert r.status_code == 400
 
 
 @pytest.fixture(scope="module")
 def checkout_privati():
-    r = S.post(f"{BASE}/api/checkout/session", json={"package_id": "privati", "origin_url": "https://example.com"})
+    r = S.post(
+        f"{BASE}/api/checkout/session",
+        json={
+            "package_id": "privati",
+            "origin_url": "https://example.com",
+            "email": "checkout_privati@example.com",
+            "password": "Password123!",
+        },
+    )
     assert r.status_code == 200, r.text
     return r.json()
 
 
 def test_checkout_privati_ok(checkout_privati):
     d = checkout_privati
-    assert 'stripe.com' in d['url']
+    if d['session_id'].startswith('cs_dev_'):
+        assert d['url'].startswith('https://example.com/success?session_id=')
+    else:
+        assert 'stripe.com' in d['url']
     assert d['final_amount'] == 39.0
     assert d['discount'] == 0.0
 
 
 def test_checkout_bundle():
-    r = S.post(f"{BASE}/api/checkout/session", json={"package_id": "bundle", "origin_url": "https://example.com"})
+    r = S.post(
+        f"{BASE}/api/checkout/session",
+        json={
+            "package_id": "bundle",
+            "origin_url": "https://example.com",
+            "email": "checkout_bundle@example.com",
+            "password": "Password123!",
+        },
+    )
     assert r.status_code == 200
     assert r.json()['final_amount'] == 67.5
 
@@ -103,7 +130,16 @@ def test_checkout_with_coupon_applies_discount():
     leads = S.get(f"{BASE}/api/leads").json()
     code = next(l['coupon_code'] for l in leads if l['email'] == email)
     # server.py uses field name 'coupon' on CheckoutRequest
-    r = S.post(f"{BASE}/api/checkout/session", json={"package_id": "bundle", "origin_url": "https://example.com", "coupon": code})
+    r = S.post(
+        f"{BASE}/api/checkout/session",
+        json={
+            "package_id": "bundle",
+            "origin_url": "https://example.com",
+            "coupon": code,
+            "email": "coupon_apply_checkout@example.com",
+            "password": "Password123!",
+        },
+    )
     assert r.status_code == 200, r.text
     d = r.json()
     assert d['final_amount'] == 57.5  # 67.50 - 10
@@ -111,7 +147,16 @@ def test_checkout_with_coupon_applies_discount():
 
 
 def test_checkout_with_invalid_coupon_ignored():
-    r = S.post(f"{BASE}/api/checkout/session", json={"package_id": "bundle", "origin_url": "https://example.com", "coupon": "FFZZZZZZ"})
+    r = S.post(
+        f"{BASE}/api/checkout/session",
+        json={
+            "package_id": "bundle",
+            "origin_url": "https://example.com",
+            "coupon": "FFZZZZZZ",
+            "email": "invalid_coupon_checkout@example.com",
+            "password": "Password123!",
+        },
+    )
     assert r.status_code == 200
     d = r.json()
     assert d['final_amount'] == 67.5
@@ -134,12 +179,18 @@ def test_checkout_status_notfound():
 @pytest.fixture(scope="module")
 def paid_download_session():
     email = "download_test@example.com"
+    password = "Password123!"
     r = S.post(
         f"{BASE}/api/checkout/test-bypass",
-        json={"package_id": "bundle", "origin_url": "http://127.0.0.1:3000", "email": email},
+        json={
+            "package_id": "bundle",
+            "origin_url": "http://127.0.0.1:3000",
+            "email": email,
+            "password": password,
+        },
     )
     assert r.status_code == 200, r.text
-    return {"session_id": r.json()["session_id"], "email": email}
+    return {"session_id": r.json()["session_id"], "email": email, "password": password}
 
 
 def test_download_vincenzo_info(paid_download_session):
@@ -229,6 +280,27 @@ def test_customer_request_unknown_no_leak():
     r = S.post(f"{BASE}/api/customer/request-access", json={"email": "nonexistent@example.com"})
     assert r.status_code == 200
     assert r.json()['ok'] is True
+
+
+def test_customer_password_login_valid(paid_download_session):
+    r = S.post(
+        f"{BASE}/api/customer/login",
+        json={"email": paid_download_session["email"], "password": paid_download_session["password"]},
+    )
+    assert r.status_code == 200, r.text
+    token = r.json()["token"]
+
+    r = S.get(f"{BASE}/api/customer/orders", headers={"x-customer-token": token})
+    assert r.status_code == 200, r.text
+    assert any(o["session_id"] == paid_download_session["session_id"] for o in r.json()["orders"])
+
+
+def test_customer_password_login_wrong_password(paid_download_session):
+    r = S.post(
+        f"{BASE}/api/customer/login",
+        json={"email": paid_download_session["email"], "password": "Password999!"},
+    )
+    assert r.status_code == 401
 
 
 @pytest.fixture(scope="module")

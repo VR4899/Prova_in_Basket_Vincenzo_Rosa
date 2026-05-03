@@ -5,7 +5,7 @@ Progetto full-stack per la vendita di guide fiscali digitali con:
 - landing page commerciale
 - raccolta lead e sequenza email marketing
 - checkout Stripe test o reale
-- area riservata cliente con magic link
+- area riservata cliente con email + password, piu fallback via magic link
 - dashboard admin
 - sincronizzazione opzionale con Google Sheets
 

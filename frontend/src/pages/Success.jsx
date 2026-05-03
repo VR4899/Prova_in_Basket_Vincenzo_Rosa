@@ -103,8 +103,8 @@ export default function Success() {
                   Ottimo lavoro<span className="text-[#CCFF00]">.</span>
                 </h1>
                 <p className="text-zinc-300 leading-relaxed text-lg">
-                  Il pagamento è andato a buon fine. Tra pochi minuti riceverai
-                  un'email con il link per scaricare le tue guide.
+                  Il pagamento è andato a buon fine. Puoi entrare quando vuoi nell&apos;area riservata
+                  usando l&apos;email e la password inserite in fase di acquisto.
                 </p>
 
                 <div className="mt-8 p-6 rounded-2xl bg-[#0c0c0e] border border-zinc-800 space-y-2">
@@ -132,8 +132,16 @@ export default function Success() {
                   Scarica le tue guide ora
                 </Link>
 
+                <Link
+                  to="/area-riservata"
+                  className="mt-3 group border border-zinc-700 text-white font-bold uppercase tracking-wide px-8 py-4 rounded-lg hover:border-zinc-500 hover:bg-zinc-900 transition-all inline-flex items-center justify-center gap-2 w-full"
+                  data-testid="goto-customer-area"
+                >
+                  Vai all&apos;area riservata
+                </Link>
+
                 <div className="mt-8 flex items-center gap-3 text-sm text-zinc-500">
-                  <Mail className="w-4 h-4" /> Controlla anche la cartella spam.
+                  <Mail className="w-4 h-4" /> Se il servizio email è attivo, controlla anche la cartella spam.
                 </div>
               </>
             )}

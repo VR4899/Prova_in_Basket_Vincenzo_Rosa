@@ -24,8 +24,11 @@ export default function CustomerArea() {
   const navigate = useNavigate();
   const urlToken = params.get("token");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
   const [testAccessLoading, setTestAccessLoading] = useState(false);
+  const [showLinkFallback, setShowLinkFallback] = useState(false);
   const [sent, setSent] = useState(false);
 
   const [sessionToken, setSessionToken] = useState(() => {
@@ -93,7 +96,7 @@ export default function CustomerArea() {
       setSessionToken("");
       setSessionExpiresAt("");
       setOrders(null);
-      setError("La sessione è scaduta. Richiedi un nuovo link di accesso.");
+      setError("La sessione è scaduta. Accedi di nuovo con email e password.");
       return;
     }
 
@@ -110,12 +113,48 @@ export default function CustomerArea() {
         setSessionToken("");
         setSessionExpiresAt("");
         setOrders(null);
-        if (code === 403 || code === 401) setError("La sessione è scaduta. Richiedi un nuovo link qui sotto.");
-        else if (code === 404) setError("Link non valido. Richiedine uno nuovo qui sotto.");
+        if (code === 403 || code === 401) setError("La sessione è scaduta. Accedi di nuovo con email e password.");
+        else if (code === 404) setError("Accesso non valido. Riprova con le tue credenziali.");
         else setError("Errore di rete. Riprova tra poco.");
       })
       .finally(() => setLoadingOrders(false));
   }, [sessionToken, resolvingSession]);
+
+  const handlePasswordLogin = async (e) => {
+    e.preventDefault();
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedPassword = password.trim();
+
+    if (!normalizedEmail || !normalizedPassword) {
+      toast.error("Inserisci email e password.");
+      return;
+    }
+    if (normalizedPassword.length < 8) {
+      toast.error("La password deve avere almeno 8 caratteri.");
+      return;
+    }
+
+    setError(null);
+    setLoginLoading(true);
+    try {
+      const { data } = await axios.post(`${API}/customer/login`, {
+        email: normalizedEmail,
+        password: normalizedPassword,
+      });
+      persistCustomerSession(data.token, data.expires_at);
+      setSessionToken(data.token);
+      setSessionExpiresAt(data.expires_at);
+      setSent(false);
+      setPassword("");
+      toast.success("Accesso effettuato.");
+    } catch (err) {
+      const message = err.response?.data?.detail || "Credenziali non valide. Riprova.";
+      setError(message);
+      toast.error(message);
+    } finally {
+      setLoginLoading(false);
+    }
+  };
 
   const handleRequestAccess = async (e) => {
     e.preventDefault();
@@ -164,6 +203,8 @@ export default function CustomerArea() {
     setOrders(null);
     setError(null);
     setSent(false);
+    setPassword("");
+    setShowLinkFallback(false);
     setEmail("");
     navigate("/area-riservata", { replace: true });
     toast.success("Sei uscito dall'area riservata.");
@@ -240,8 +281,8 @@ export default function CustomerArea() {
               Accedi ai tuoi acquisti<span className="text-[#CCFF00]">.</span>
             </h1>
             <p className="text-zinc-400 mb-10 text-lg">
-              Inserisci l'email che hai usato per acquistare. Ti inviamo un link sicuro
-              per accedere all'area download. Il link si usa una sola volta e apre una sessione protetta.
+              Usa l&apos;email e la password scelte durante l&apos;acquisto. In questo modo puoi
+              rientrare quando vuoi nell&apos;area riservata anche se l&apos;email automatica non arriva.
             </p>
 
             {error && (
@@ -250,75 +291,132 @@ export default function CustomerArea() {
               </div>
             )}
 
-            {sent ? (
-              <div className="bg-[#18181B] border border-[#CCFF00]/40 rounded-2xl p-8 text-center" data-testid="access-sent">
-                <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#CCFF00] text-black mb-6">
-                  <Mail className="w-7 h-7" />
-                </div>
-                <h3 className="font-display text-2xl font-bold mb-3">Email inviata.</h3>
-                <p className="text-zinc-400 leading-relaxed">
-                  Se l'indirizzo è associato a un acquisto, riceverai a breve un link
-                  per accedere all'area riservata.
-                </p>
-                <p className="text-xs text-zinc-600 mt-6">
-                  Non vedi l'email? Controlla nello spam o richiedi un nuovo link tra qualche minuto.
-                </p>
-                <button
-                  onClick={() => { setSent(false); setEmail(""); }}
-                  className="mt-6 text-zinc-400 hover:text-white text-sm font-semibold"
-                  data-testid="try-again"
-                >
-                  Prova un'altra email
-                </button>
+            <form
+              onSubmit={handlePasswordLogin}
+              className="bg-[#18181B] border border-[#27272A] rounded-2xl p-6 sm:p-8 space-y-5"
+              data-testid="password-access-form"
+            >
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-zinc-500 font-bold mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  required
+                  autoFocus
+                  placeholder="la-tua@email.it"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-zinc-900 border border-zinc-800 text-white rounded-lg px-4 py-3.5 focus:ring-2 focus:ring-[#CCFF00] focus:border-transparent outline-none transition-all placeholder:text-zinc-600"
+                  data-testid="access-email-input"
+                />
               </div>
-            ) : (
-              <form
-                onSubmit={handleRequestAccess}
-                className="bg-[#18181B] border border-[#27272A] rounded-2xl p-6 sm:p-8 space-y-5"
-                data-testid="access-form"
+
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-zinc-500 font-bold mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  required
+                  placeholder="La password scelta durante l'acquisto"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-zinc-900 border border-zinc-800 text-white rounded-lg px-4 py-3.5 focus:ring-2 focus:ring-[#CCFF00] focus:border-transparent outline-none transition-all placeholder:text-zinc-600"
+                  data-testid="access-password-input"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loginLoading}
+                className="w-full bg-[#CCFF00] text-black font-bold uppercase tracking-wide py-3.5 rounded-lg hover:bg-[#B3E600] transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                data-testid="customer-password-login"
               >
-                <div>
-                  <label className="block text-xs uppercase tracking-wider text-zinc-500 font-bold mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    autoFocus
-                    placeholder="la-tua@email.it"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-zinc-900 border border-zinc-800 text-white rounded-lg px-4 py-3.5 focus:ring-2 focus:ring-[#CCFF00] focus:border-transparent outline-none transition-all placeholder:text-zinc-600"
-                    data-testid="access-email-input"
-                  />
-                </div>
+                {loginLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Entra nell'area riservata"}
+              </button>
+
+              <p className="text-xs text-zinc-600 text-center">
+                Se hai gia acquistato, usa le stesse credenziali anche per ritrovare gli ordini futuri.
+              </p>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setShowLinkFallback((prev) => !prev);
+                  setSent(false);
+                }}
+                className="w-full text-sm font-semibold text-zinc-400 hover:text-white transition-colors"
+                data-testid="toggle-magic-link-fallback"
+              >
+                {showLinkFallback ? "Nascondi il link via email" : "Preferisci ricevere un link via email?"}
+              </button>
+
+              {showLocalTestFeatures && (
                 <button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full bg-[#CCFF00] text-black font-bold uppercase tracking-wide py-3.5 rounded-lg hover:bg-[#B3E600] transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
-                  data-testid="access-submit"
+                  type="button"
+                  onClick={handleTestAccess}
+                  disabled={loginLoading || submitting || testAccessLoading}
+                  className="w-full border border-dashed border-zinc-700 text-zinc-300 font-semibold py-3.5 rounded-lg hover:border-zinc-500 hover:text-white transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                  data-testid="customer-test-access"
                 >
-                  {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : (
-                    <><Mail className="w-4 h-4" /> Inviami il link</>
+                  {testAccessLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
+                    <><ShieldCheck className="w-4 h-4" /> Accedi in test</>
                   )}
                 </button>
-                <p className="text-xs text-zinc-600 text-center">
-                  Per la tua sicurezza non chiediamo password. Il link via email è monouso e apre una sessione temporanea.
-                </p>
-                {showLocalTestFeatures && (
-                  <button
-                    type="button"
-                    onClick={handleTestAccess}
-                    disabled={submitting || testAccessLoading}
-                    className="w-full border border-dashed border-zinc-700 text-zinc-300 font-semibold py-3.5 rounded-lg hover:border-zinc-500 hover:text-white transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
-                    data-testid="customer-test-access"
-                  >
-                    {testAccessLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
-                      <><ShieldCheck className="w-4 h-4" /> Accedi in test</>
-                    )}
-                  </button>
+              )}
+            </form>
+
+            {showLinkFallback && (
+              <div className="mt-6 space-y-4">
+                {sent && (
+                  <div className="bg-[#18181B] border border-[#CCFF00]/40 rounded-2xl p-8 text-center" data-testid="access-sent">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#CCFF00] text-black mb-6">
+                      <Mail className="w-7 h-7" />
+                    </div>
+                    <h3 className="font-display text-2xl font-bold mb-3">Email inviata.</h3>
+                    <p className="text-zinc-400 leading-relaxed">
+                      Se l&apos;indirizzo è associato a un acquisto, riceverai a breve un link
+                      per accedere all&apos;area riservata.
+                    </p>
+                    <p className="text-xs text-zinc-600 mt-6">
+                      Non vedi l&apos;email? Controlla nello spam o richiedi un nuovo link tra qualche minuto.
+                    </p>
+                    <button
+                      onClick={() => setSent(false)}
+                      className="mt-6 text-zinc-400 hover:text-white text-sm font-semibold"
+                      data-testid="try-again"
+                    >
+                      Richiedi un altro link
+                    </button>
+                  </div>
                 )}
-              </form>
+
+                {!sent && (
+                  <form
+                    onSubmit={handleRequestAccess}
+                    className="bg-[#131316] border border-[#27272A] rounded-2xl p-6 space-y-4"
+                    data-testid="access-form"
+                  >
+                    <div className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-500">
+                      Fallback via email
+                    </div>
+                    <p className="text-sm text-zinc-400">
+                      Se preferisci, possiamo ancora inviarti un link monouso alla stessa email dell&apos;acquisto.
+                    </p>
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="w-full bg-zinc-900 text-white font-bold uppercase tracking-wide py-3.5 rounded-lg hover:bg-zinc-800 transition-colors disabled:opacity-60 flex items-center justify-center gap-2 border border-zinc-800"
+                      data-testid="access-submit"
+                    >
+                      {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : (
+                        <><Mail className="w-4 h-4" /> Inviami il link</>
+                      )}
+                    </button>
+                  </form>
+                )}
+              </div>
             )}
           </div>
         )}
@@ -343,7 +441,7 @@ export default function CustomerArea() {
                   to="/area-riservata"
                   className="inline-flex bg-[#CCFF00] text-black font-bold uppercase tracking-wide px-6 py-3 rounded-lg hover:bg-[#B3E600] transition-colors"
                 >
-                  Richiedi nuovo link
+                  Torna all'accesso
                 </Link>
               </div>
             )}

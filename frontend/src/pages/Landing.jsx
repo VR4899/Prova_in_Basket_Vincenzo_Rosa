@@ -111,7 +111,7 @@ const TESTIMONIALS = [
 ];
 
 const FAQS = [
-  { q: "Come ricevo le guide?", a: "Subito dopo il pagamento ricevi un'email con il link per scaricare i PDF. Sono tuoi per sempre." },
+  { q: "Come ricevo le guide?", a: "Subito dopo il pagamento puoi entrare nell'area riservata con email e password usate in acquisto. Se il servizio email è attivo ricevi anche la conferma con il link diretto al download. I PDF restano tuoi per sempre." },
   { q: "I PDF sono aggiornati?", a: "Sì. Le guide sono aggiornate al 2026 con riferimenti normativi recenti. Le revisioni minori sono incluse per 12 mesi." },
   { q: "Sono adatte anche a chi non è esperto?", a: "Sono nate proprio per loro. Niente burocratese, solo procedure chiare con screenshot reali dei portali." },
   { q: "Posso restituire il prodotto?", a: "Trattandosi di prodotto digitale scaricabile, il diritto di recesso decade ai sensi del Codice del Consumo (art. 59). Tuttavia se non sei soddisfatto scrivici, troviamo una soluzione." },
@@ -123,6 +123,7 @@ export default function Landing() {
   const [openFaq, setOpenFaq] = useState(null);
   const [loading, setLoading] = useState(null);
   const [leadForm, setLeadForm] = useState({ nome: "", email: "", interesse: "estratto_gratuito" });
+  const [purchaseAccess, setPurchaseAccess] = useState({ email: "", password: "" });
   const [leadLoading, setLeadLoading] = useState(false);
   const [coupon, setCoupon] = useState("");
   const [couponInfo, setCouponInfo] = useState(null);
@@ -141,33 +142,55 @@ export default function Landing() {
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const buildCheckoutPayload = (packageId) => {
+    const normalizedEmail = purchaseAccess.email.trim().toLowerCase();
+    const normalizedPassword = purchaseAccess.password.trim();
+
+    if (!normalizedEmail || !normalizedPassword) {
+      toast.error("Prima di acquistare inserisci email e password per l'area riservata.");
+      return null;
+    }
+
+    if (normalizedPassword.length < 8) {
+      toast.error("La password deve avere almeno 8 caratteri.");
+      return null;
+    }
+
+    const payload = {
+      package_id: packageId,
+      origin_url: window.location.origin,
+      email: normalizedEmail,
+      password: normalizedPassword,
+    };
+    if (couponInfo) payload.coupon = couponInfo.code;
+    return payload;
+  };
+
   const handleCheckout = async (packageId) => {
+    const payload = buildCheckoutPayload(packageId);
+    if (!payload) return;
     setLoading(`stripe:${packageId}`);
     try {
-      const origin_url = window.location.origin;
-      const payload = { package_id: packageId, origin_url };
-      if (couponInfo) payload.coupon = couponInfo.code;
       const { data } = await axios.post(`${API}/checkout/session`, payload);
       window.location.href = data.url;
     } catch (err) {
       console.error(err);
-      toast.error("Impossibile avviare il checkout. Riprova tra poco.");
+      toast.error(err.response?.data?.detail || "Impossibile avviare il checkout. Riprova tra poco.");
       setLoading(null);
     }
   };
 
   const handleTestBypassCheckout = async (packageId) => {
+    const payload = buildCheckoutPayload(packageId);
+    if (!payload) return;
     setLoading(`bypass:${packageId}`);
     try {
-      const origin_url = window.location.origin;
-      const payload = { package_id: packageId, origin_url };
-      if (couponInfo) payload.coupon = couponInfo.code;
       const { data } = await axios.post(`${API}/checkout/test-bypass`, payload);
       toast.success("Pagamento bypassato in modalita test.");
       window.location.href = data.url;
     } catch (err) {
       console.error(err);
-      toast.error("Bypass test non disponibile. Controlla il backend.");
+      toast.error(err.response?.data?.detail || "Bypass test non disponibile. Controlla il backend.");
       setLoading(null);
     }
   };
@@ -452,6 +475,44 @@ export default function Landing() {
             </h2>
             <p className="mt-6 text-lg text-zinc-400">
               Nessun abbonamento. Compri una volta, le guide sono tue per sempre.
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto mb-10 rounded-3xl border border-zinc-800 bg-[#111114] p-6 sm:p-8" data-testid="purchase-access-box">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#CCFF00] mb-3">
+              Accesso Cliente
+            </div>
+            <h3 className="font-display text-2xl sm:text-3xl font-black tracking-tight mb-3">
+              Prima di acquistare, scegli le credenziali con cui rientrare<span className="text-[#CCFF00]">.</span>
+            </h3>
+            <p className="text-zinc-400 leading-relaxed mb-6">
+              Inserisci qui email e password: saranno le stesse da usare poi nell&apos;area riservata per
+              ritrovare i tuoi acquisti. Se hai gia un account cliente, riusa le stesse credenziali.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <input
+                type="email"
+                required
+                placeholder="Email per l'area riservata"
+                value={purchaseAccess.email}
+                onChange={(e) => setPurchaseAccess((prev) => ({ ...prev, email: e.target.value }))}
+                className="bg-zinc-900 border border-zinc-800 text-white rounded-lg px-4 py-3.5 focus:ring-2 focus:ring-[#CCFF00] focus:border-transparent outline-none transition-all placeholder:text-zinc-600"
+                data-testid="purchase-access-email"
+              />
+              <input
+                type="password"
+                required
+                placeholder="Password area riservata"
+                value={purchaseAccess.password}
+                onChange={(e) => setPurchaseAccess((prev) => ({ ...prev, password: e.target.value }))}
+                className="bg-zinc-900 border border-zinc-800 text-white rounded-lg px-4 py-3.5 focus:ring-2 focus:ring-[#CCFF00] focus:border-transparent outline-none transition-all placeholder:text-zinc-600"
+                data-testid="purchase-access-password"
+              />
+            </div>
+
+            <p className="mt-4 text-xs text-zinc-500">
+              Ti basta una password di almeno 8 caratteri. In questo modo puoi rientrare anche senza dipendere dalla mail.
             </p>
           </div>
 
