@@ -1,0 +1,179 @@
+{
+  "theme_and_archetype": {
+    "domain": "Finance / Tax Info Products (Fisco Facile)",
+    "theme": "Dark",
+    "archetype": "Archetype 4 (Swiss & High-Contrast) - Custom Fintech Variant",
+    "vibe": "Modern fintech, energetic, trust-building, anti-bureaucratic, high-end (Revolut/Stripe aesthetic)"
+  },
+  "typography": {
+    "anti_patterns": ["Inter", "Roboto", "Open Sans", "Syne"],
+    "fonts": {
+      "headings": {
+        "family": "Outfit",
+        "fallback": "Cabinet Grotesk",
+        "description": "Bold, geometric, energetic. Used for high-impact statements.",
+        "import_url": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap"
+      },
+      "body": {
+        "family": "Manrope",
+        "description": "Clean, readable, modern sans for dense info and standard text.",
+        "import_url": "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "description": "Used for numbers, pricing, tags, and data-centric elements to push the fintech aesthetic.",
+        "import_url": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+      }
+    },
+    "scales": {
+      "h1": "text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-none",
+      "h2": "text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight",
+      "h3": "text-xl sm:text-2xl font-bold tracking-tight",
+      "body_lg": "text-lg text-zinc-300 leading-relaxed",
+      "body": "text-base text-zinc-400 leading-relaxed",
+      "overline": "text-xs font-bold uppercase tracking-[0.2em] text-lime-400",
+      "price": "text-4xl sm:text-5xl font-black tracking-tighter font-mono"
+    }
+  },
+  "color_palette": {
+    "background": {
+      "base": "#09090B",
+      "surface": "#121214",
+      "card": "#18181B",
+      "overlay": "rgba(9, 9, 11, 0.7)"
+    },
+    "text": {
+      "primary": "#FAFAFA",
+      "secondary": "#A1A1AA",
+      "muted": "#71717A"
+    },
+    "brand_accent": {
+      "primary": "#CCFF00",
+      "primary_hover": "#B3E600",
+      "primary_glow": "rgba(204, 255, 0, 0.2)",
+      "secondary": "#FFFFFF"
+    },
+    "borders": {
+      "subtle": "#27272A",
+      "active": "#CCFF00",
+      "muted": "#1F1F22"
+    }
+  },
+  "spacing_and_layout": {
+    "philosophy": "Generous Spacing, High Contrast, Structured Grids",
+    "container": "max-w-7xl mx-auto px-6 sm:px-8 md:px-12",
+    "section_padding": "py-24 sm:py-32",
+    "bento_grid": {
+      "gap": "gap-4 sm:gap-6",
+      "radius": "rounded-2xl"
+    }
+  },
+  "components_strategy": {
+    "cards": {
+      "style": "Flat background (bg-[#18181B]), 1px subtle border (border-[#27272A]), no default shadow.",
+      "hover": "Hover state should lift slightly (-translate-y-1) and change border color to border-zinc-600, with a subtle glow for the highlighted pricing card."
+    },
+    "buttons": {
+      "primary": "bg-[#CCFF00] text-black font-bold uppercase tracking-wide hover:bg-[#B3E600] transition-colors rounded-lg px-8 py-4",
+      "secondary": "bg-zinc-800 text-white font-semibold hover:bg-zinc-700 transition-colors border border-zinc-700 rounded-lg px-8 py-4",
+      "ghost": "bg-transparent text-zinc-300 hover:text-white transition-colors"
+    },
+    "inputs": {
+      "style": "bg-zinc-900 border border-zinc-800 text-white rounded-lg focus:ring-2 focus:ring-[#CCFF00] focus:border-transparent transition-all"
+    },
+    "accordion": {
+      "style": "Border-b border-zinc-800. Headers must be bold. Icons should be Phosphor or Lucide plus/minus, not generic arrows."
+    },
+    "icons": {
+      "library": "lucide-react or @phosphor-icons/react",
+      "style": "Use sharp, linear icons. Give them a subtle background container (e.g., bg-zinc-800/50 p-3 rounded-lg text-lime-400) to make them pop."
+    }
+  },
+  "sections": {
+    "header": {
+      "layout": "Fixed top, glassmorphism (bg-[#09090B]/80 backdrop-blur-md), border-b border-[#27272A]. Contains Logo and CTA.",
+      "logo": "Text logo 'Fisco Facile' in Outfit font, bold, tracking-tight. Dot on the 'i' could be #CCFF00."
+    },
+    "hero": {
+      "layout": "Massive typography, left-aligned or centered, max-w-4xl. Background should feature the dark grid noise texture or abstract floating cubes.",
+      "elements": [
+        "Overline: 'LA FISCALITÀ ITALIANA, FINALMENTE SEMPLICE'",
+        "H1: 'Non regalare più tempo e soldi alla burocrazia.'",
+        "Subtitle: 'Guide pratiche e step-by-step per privati e aziende. Gestisci Agenzia delle Entrate, INPS e Riscossione senza pagare consulenti costosi.'",
+        "CTA Primary: 'Scopri i pacchetti' (Scrolls to pricing)",
+        "Trust Badges: 'Aggiornato al 2026', 'Scaricato da 5.000+ italiani'"
+      ]
+    },
+    "benefits": {
+      "layout": "Bento Grid layout. 3-4 key value props.",
+      "items": [
+        "Zero Burocratese (Testi chiari, scritti per gli umani)",
+        "Risparmio Immediato (Taglia i costi del commercialista per pratiche semplici)",
+        "Step-by-Step (Screenshot e procedure guidate reali)",
+        "Supporto Normativo (Riferimenti di legge spiegati in modo semplice)"
+      ]
+    },
+    "pricing": {
+      "layout": "3 columns on desktop. Grid-cols-1 on mobile. Middle card is highlighted.",
+      "cards": [
+        {
+          "name": "Privati",
+          "price": "€39",
+          "features": "16 guide pratiche, Modello 730 base, ISEE, Bonus",
+          "style": "Standard dark card"
+        },
+        {
+          "name": "Bundle (Acquistati Insieme)",
+          "price": "€90",
+          "features": "Tutte le 28 guide, Aggiornamenti gratuiti 1 anno, Accesso prioritario",
+          "style": "Highlighted: border-[#CCFF00] shadow-[0_0_30px_rgba(204,255,0,0.1)] relative. Add a 'Miglior Valore' absolute badge at the top."
+        },
+        {
+          "name": "Aziende & P.IVA",
+          "price": "€39",
+          "features": "12 guide avanzate, Fatturazione elettronica, F24, Scadenze",
+          "style": "Standard dark card"
+        }
+      ]
+    },
+    "guides_list": {
+      "layout": "Use Shadcn Tabs to switch between 'Privati' and 'Aziende', then list the guides using an Accordion to show what's inside each guide."
+    },
+    "trust_testimonials": {
+      "layout": "Marquee or grid of clean, minimal cards. Focus on metrics: 'Ho risparmiato 300€ di commercialista quest\\'anno'. Use real-sounding Italian names."
+    },
+    "faq": {
+      "layout": "Max-w-3xl mx-auto. Shadcn Accordion. Clear, no-BS answers about delivery (PDF download), updates, and refunds."
+    },
+    "lead_capture": {
+      "layout": "Section with a slightly lighter background (bg-zinc-900), featuring a form to download a free sample guide ('Scarica un estratto gratuito'). Name, Email, Submit.",
+      "style": "Input focus ring must be #CCFF00."
+    },
+    "footer": {
+      "layout": "Minimalist. Big typography for logo. Links to P.IVA, Privacy Policy, Terms.",
+      "spacing": "py-20 border-t border-zinc-800"
+    }
+  },
+  "media": {
+    "hero_background": {
+      "url": "https://images.unsplash.com/photo-1759159347827-de3a54002de7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NDh8MHwxfHNlYXJjaHwyfHxkYXJrJTIwYWJzdHJhY3QlMjBnZW9tZXRyeSUyMHRlY2h8ZW58MHx8fHwxNzc3Njc1NTYwfDA&ixlib=rb-4.1.0&q=85",
+      "description": "Rows of dark cubes with glowing green lines. Use as absolute positioned background in hero, with opacity-30 and mix-blend-screen to create depth without distracting."
+    },
+    "texture_overlay": {
+      "url": "https://images.pexels.com/photos/18599094/pexels-photo-18599094.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Grainy noise texture. Apply globally or to dark sections with pointer-events-none, opacity-5, mix-blend-overlay to kill digital flatness."
+    },
+    "testimonial_context_1": {
+      "url": "https://images.unsplash.com/photo-1629181659645-619389c8a2ba?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBwcm9mZXNzaW9uYWwlMjB3b3JraW5nJTIwZGFya3xlbnwwfHx8fDE3Nzc2NzU1NDV8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Professional working on macbook. Can be used as a subtle background for the 'Privati' or 'Aziende' section, heavily darkened."
+    }
+  },
+  "motion_and_interaction": {
+    "scrolling": "Use smooth scrolling (Lenis) if possible. It adds premium weight.",
+    "hover_states": "All interactive elements MUST explicitly set text color on hover. e.g., hover:bg-zinc-800 hover:text-white.",
+    "reveal": "Use framer-motion for staggered fade-up on text blocks and bento cards."
+  },
+  "testing": {
+    "data_testid_rules": "All interactive and key informational elements MUST include a data-testid attribute in kebab-case, role-based format (e.g., data-testid='hero-cta-button', data-testid='pricing-card-bundle', data-testid='faq-accordion-item-1')."
+  }
+}

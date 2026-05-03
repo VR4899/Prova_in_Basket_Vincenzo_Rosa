@@ -1,0 +1,33 @@
+<svg width="1200" height="1200" viewBox="0 0 1200 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="burstBg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(600 560) rotate(90) scale(580)">
+      <stop stop-color="#1A1A1E"/>
+      <stop offset="1" stop-color="#09090B"/>
+    </radialGradient>
+    <radialGradient id="burstGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(600 600) rotate(90) scale(280)">
+      <stop stop-color="#CCFF00" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#CCFF00" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="1200" rx="60" fill="url(#burstBg)"/>
+  <circle cx="600" cy="600" r="280" fill="url(#burstGlow)"/>
+
+  <g stroke="#CCFF00" stroke-linecap="round">
+    <circle cx="600" cy="600" r="250" stroke-opacity="0.20" stroke-width="3"/>
+    <circle cx="600" cy="600" r="194" stroke-opacity="0.12" stroke-width="3"/>
+    <circle cx="600" cy="600" r="142" stroke-opacity="0.32" stroke-width="3"/>
+    <path d="M600 156V286M600 914V1044M156 600H286M914 600H1044" stroke-opacity="0.34" stroke-width="7"/>
+    <path d="M302 302L386 386M898 302L814 386M302 898L386 814M898 898L814 814" stroke-opacity="0.20" stroke-width="6"/>
+  </g>
+
+  <circle cx="600" cy="600" r="150" fill="#0C0C0E" stroke="#CCFF00" stroke-width="6"/>
+  <circle cx="600" cy="600" r="126" stroke="#CCFF00" stroke-opacity="0.18" stroke-width="4"/>
+  <ellipse cx="600" cy="600" rx="68" ry="126" stroke="#CCFF00" stroke-opacity="0.50" stroke-width="4"/>
+  <ellipse cx="600" cy="600" rx="24" ry="126" stroke="#CCFF00" stroke-opacity="0.24" stroke-width="4"/>
+  <ellipse cx="600" cy="600" rx="126" ry="72" stroke="#CCFF00" stroke-opacity="0.42" stroke-width="4"/>
+  <ellipse cx="600" cy="600" rx="126" ry="24" stroke="#CCFF00" stroke-opacity="0.18" stroke-width="4"/>
+  <path d="M492 548C526 516 560 500 616 496" stroke="#FAFAFA" stroke-opacity="0.14" stroke-width="6" stroke-linecap="round"/>
+  <text x="600" y="650" text-anchor="middle" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="154" font-weight="900">€</text>
+  <text x="600" y="1006" text-anchor="middle" fill="#A1A1AA" font-family="Outfit, Arial, sans-serif" font-size="38" font-weight="700" letter-spacing="8">GRAFICA DECORATIVA</text>
+</svg>

@@ -1,0 +1,45 @@
+<svg width="720" height="720" viewBox="0 0 720 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="badgeBg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(360 320) rotate(90) scale(330)">
+      <stop offset="0" stop-color="#1B1B1F"/>
+      <stop offset="1" stop-color="#09090B"/>
+    </radialGradient>
+    <path id="badgeArcTop" d="M 112 360 A 248 248 0 0 1 608 360"/>
+    <path id="badgeArcBottom" d="M 138 392 A 222 222 0 0 0 582 392"/>
+    <clipPath id="badgeGlobeClip">
+      <circle cx="360" cy="372" r="126"/>
+    </clipPath>
+  </defs>
+
+  <circle cx="360" cy="360" r="320" fill="url(#badgeBg)" stroke="#CCFF00" stroke-width="8"/>
+  <circle cx="360" cy="360" r="284" stroke="#CCFF00" stroke-opacity="0.24" stroke-width="5"/>
+
+  <g stroke="#CCFF00" stroke-width="5" stroke-linecap="round" stroke-opacity="0.75">
+    <line x1="360" y1="54" x2="360" y2="72"/>
+    <line x1="360" y1="648" x2="360" y2="666"/>
+    <line x1="54" y1="360" x2="72" y2="360"/>
+    <line x1="648" y1="360" x2="666" y2="360"/>
+    <line x1="145" y1="145" x2="157" y2="157"/>
+    <line x1="575" y1="575" x2="563" y2="563"/>
+    <line x1="575" y1="145" x2="563" y2="157"/>
+    <line x1="145" y1="575" x2="157" y2="563"/>
+  </g>
+
+  <text fill="#FAFAFA" font-family="Outfit, Arial, sans-serif" font-size="44" font-weight="900" letter-spacing="10">
+    <textPath href="#badgeArcTop" startOffset="50%" text-anchor="middle">FISCO FACILE</textPath>
+  </text>
+  <text fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="7">
+    <textPath href="#badgeArcBottom" startOffset="50%" text-anchor="middle">GUIDE FISCALI DIGITALI</textPath>
+  </text>
+
+  <circle cx="360" cy="372" r="144" stroke="#CCFF00" stroke-opacity="0.18" stroke-width="6"/>
+  <g clip-path="url(#badgeGlobeClip)">
+    <circle cx="360" cy="372" r="126" fill="#CCFF00" fill-opacity="0.05" stroke="#CCFF00" stroke-width="6"/>
+    <ellipse cx="360" cy="372" rx="66" ry="126" stroke="#CCFF00" stroke-opacity="0.54" stroke-width="5"/>
+    <ellipse cx="360" cy="372" rx="24" ry="126" stroke="#CCFF00" stroke-opacity="0.28" stroke-width="5"/>
+    <ellipse cx="360" cy="372" rx="126" ry="72" stroke="#CCFF00" stroke-opacity="0.48" stroke-width="5"/>
+    <ellipse cx="360" cy="372" rx="126" ry="28" stroke="#CCFF00" stroke-opacity="0.22" stroke-width="5"/>
+    <path d="M248 322C282 290 317 274 371 270" stroke="#FAFAFA" stroke-opacity="0.16" stroke-width="7" stroke-linecap="round"/>
+    <text x="360" y="414" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="150" font-weight="900" text-anchor="middle">€</text>
+  </g>
+</svg>

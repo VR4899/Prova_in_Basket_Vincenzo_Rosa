@@ -1,0 +1,202 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800;900&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --ff-bg: #09090b;
+    --ff-surface: #121214;
+    --ff-card: #18181b;
+    --ff-border: #27272a;
+    --ff-border-muted: #1f1f22;
+    --ff-text: #fafafa;
+    --ff-text-secondary: #a1a1aa;
+    --ff-text-muted: #71717a;
+    --ff-accent: #ccff00;
+    --ff-accent-hover: #b3e600;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background-color: var(--ff-bg);
+    color: var(--ff-text);
+    font-family: "Manrope", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+::selection {
+    background: var(--ff-accent);
+    color: #000;
+}
+
+.font-display {
+    font-family: "Outfit", system-ui, sans-serif;
+    letter-spacing: -0.02em;
+}
+
+.font-mono {
+    font-family: "JetBrains Mono", monospace;
+}
+
+/* Subtle animated grid background */
+.grid-bg {
+    background-image:
+        linear-gradient(rgba(204, 255, 0, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(204, 255, 0, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+
+/* Noise overlay */
+.noise::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+    opacity: 0.05;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+}
+
+/* Glow effect */
+.accent-glow {
+    box-shadow:
+        0 0 0 1px var(--ff-accent),
+        0 0 40px rgba(204, 255, 0, 0.15);
+}
+
+/* Marquee */
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.marquee-track {
+    animation: marquee 40s linear infinite;
+}
+
+.testimonial-scroll {
+    scrollbar-width: none;
+}
+
+.testimonial-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* Reveal */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reveal {
+    animation: fadeUp 0.8s ease-out both;
+}
+
+/* Hero blob */
+@keyframes pulse-glow {
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+.pulse-glow {
+    animation: pulse-glow 6s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--ff-bg);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--ff-border);
+    border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #3f3f46;
+}
+
+/* Hide Emergent platform badge */
+#emergent-badge,
+a[id="emergent-badge"],
+a[href*="emergent.sh"][target="_blank"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Smooth section transition: soft fade at section top */
+.section-soft {
+    position: relative;
+}
+.section-soft::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    max-width: 600px;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(204, 255, 0, 0.18) 50%,
+        transparent 100%
+    );
+    pointer-events: none;
+}
+
+/* Section gradient overlay — smoothes color transition between sections */
+.section-fade-top::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(
+        180deg,
+        rgba(20, 20, 23, 0.4) 0%,
+        transparent 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+@media (max-width: 640px) {
+    .marquee-track {
+        animation: none;
+    }
+}

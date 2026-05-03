@@ -1,0 +1,50 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="azBg" x1="0" y1="0" x2="1600" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#08080A"/>
+      <stop offset="1" stop-color="#151519"/>
+    </linearGradient>
+    <linearGradient id="azCover" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#111114"/>
+      <stop offset="1" stop-color="#1D1D22"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#azBg)"/>
+  <ellipse cx="306" cy="176" rx="240" ry="120" fill="#CCFF00" fill-opacity="0.06"/>
+
+  <g transform="translate(872 122)">
+    <rect x="32" y="74" width="460" height="628" rx="36" fill="#111114" stroke="#27272A" stroke-width="3" transform="rotate(5 32 74)"/>
+    <rect x="0" y="34" width="460" height="628" rx="36" fill="url(#azCover)" stroke="#CCFF00" stroke-opacity="0.44" stroke-width="4"/>
+    <rect x="34" y="82" width="392" height="548" rx="26" fill="#0C0C0E" stroke="#27272A" stroke-width="2"/>
+    <text x="58" y="132" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="6">PACCHETTO AZIENDE</text>
+    <text x="58" y="218" fill="#FAFAFA" font-family="Outfit, Arial, sans-serif" font-size="82" font-weight="900">12 guide</text>
+    <text x="58" y="282" fill="#A1A1AA" font-family="Manrope, Arial, sans-serif" font-size="30" font-weight="500">Per P.IVA, PMI e attivita professionali.</text>
+
+    <g transform="translate(58 348)">
+      <rect x="0" y="0" width="306" height="192" rx="26" fill="#101013" stroke="#CCFF00" stroke-opacity="0.26" stroke-width="3"/>
+      <circle cx="94" cy="96" r="70" fill="none" stroke="#CCFF00" stroke-width="4"/>
+      <ellipse cx="94" cy="96" rx="38" ry="70" stroke="#CCFF00" stroke-opacity="0.40" stroke-width="3"/>
+      <ellipse cx="94" cy="96" rx="70" ry="38" stroke="#CCFF00" stroke-opacity="0.34" stroke-width="3"/>
+      <text x="94" y="120" text-anchor="middle" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="88" font-weight="900">€</text>
+      <text x="182" y="84" fill="#FAFAFA" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="700">IVA</text>
+      <text x="182" y="116" fill="#FAFAFA" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="700">LIPE</text>
+      <text x="182" y="148" fill="#FAFAFA" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="700">F24</text>
+    </g>
+  </g>
+
+  <g transform="translate(140 208)">
+    <text x="0" y="56" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="7">MOCKUP PRODOTTO</text>
+    <text x="0" y="148" fill="#FAFAFA" font-family="Outfit, Arial, sans-serif" font-size="96" font-weight="900">Aziende &amp; P.IVA</text>
+    <text x="0" y="220" fill="#A1A1AA" font-family="Manrope, Arial, sans-serif" font-size="34" font-weight="500">Struttura piu ordinata e piu credibile per un pubblico professionale.</text>
+    <g stroke="#27272A">
+      <rect x="0" y="330" width="438" height="116" rx="28" fill="#18181B"/>
+      <rect x="0" y="474" width="438" height="116" rx="28" fill="#18181B"/>
+      <rect x="0" y="618" width="438" height="116" rx="28" fill="#18181B"/>
+    </g>
+    <text x="34" y="396" fill="#FAFAFA" font-family="Manrope, Arial, sans-serif" font-size="30" font-weight="700">Copertina meno distorta</text>
+    <text x="34" y="540" fill="#FAFAFA" font-family="Manrope, Arial, sans-serif" font-size="30" font-weight="700">Più leggibile in ADV e brochure</text>
+    <text x="34" y="684" fill="#FAFAFA" font-family="Manrope, Arial, sans-serif" font-size="30" font-weight="700">Dettagli fiscali piu chiari</text>
+    <text x="0" y="808" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="84" font-weight="900">€39</text>
+  </g>
+</svg>

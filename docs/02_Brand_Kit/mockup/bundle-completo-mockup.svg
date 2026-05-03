@@ -1,0 +1,50 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bundleBg" x1="0" y1="0" x2="1600" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#09090B"/>
+      <stop offset="1" stop-color="#151518"/>
+    </linearGradient>
+    <linearGradient id="bundleCover" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#121216"/>
+      <stop offset="1" stop-color="#1E1E22"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#bundleBg)"/>
+  <circle cx="1240" cy="180" r="200" fill="#CCFF00" fill-opacity="0.08"/>
+
+  <g transform="translate(116 126)">
+    <rect x="28" y="98" width="360" height="560" rx="32" fill="#141417" stroke="#27272A" stroke-width="3" transform="rotate(-9 28 98)"/>
+    <rect x="182" y="52" width="360" height="560" rx="32" fill="#121216" stroke="#27272A" stroke-width="3" transform="rotate(-2 182 52)"/>
+    <rect x="340" y="86" width="360" height="560" rx="32" fill="#1C1C21" stroke="#27272A" stroke-width="3" transform="rotate(6 340 86)"/>
+
+    <rect x="182" y="66" width="380" height="588" rx="38" fill="url(#bundleCover)" stroke="#CCFF00" stroke-opacity="0.46" stroke-width="4"/>
+    <rect x="212" y="112" width="320" height="500" rx="24" fill="#0D0D10" stroke="#27272A" stroke-width="2"/>
+    <text x="238" y="156" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="6">BUNDLE COMPLETO</text>
+    <text x="238" y="238" fill="#FAFAFA" font-family="Outfit, Arial, sans-serif" font-size="86" font-weight="900">28 guide</text>
+    <text x="238" y="300" fill="#A1A1AA" font-family="Manrope, Arial, sans-serif" font-size="30" font-weight="500">Privati + Aziende nello stesso ecosistema.</text>
+
+    <g transform="translate(236 356)">
+      <circle cx="134" cy="134" r="112" fill="#0B0B0D" stroke="#CCFF00" stroke-width="4.5"/>
+      <ellipse cx="134" cy="134" rx="58" ry="112" stroke="#CCFF00" stroke-opacity="0.48" stroke-width="4"/>
+      <ellipse cx="134" cy="134" rx="20" ry="112" stroke="#CCFF00" stroke-opacity="0.22" stroke-width="3.5"/>
+      <ellipse cx="134" cy="134" rx="112" ry="62" stroke="#CCFF00" stroke-opacity="0.40" stroke-width="4"/>
+      <text x="134" y="172" text-anchor="middle" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="122" font-weight="900">€</text>
+    </g>
+  </g>
+
+  <g transform="translate(980 170)">
+    <text x="0" y="56" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="7">MOCKUP PRODOTTO</text>
+    <text x="0" y="148" fill="#FAFAFA" font-family="Outfit, Arial, sans-serif" font-size="96" font-weight="900">Bundle Completo</text>
+    <text x="0" y="218" fill="#A1A1AA" font-family="Manrope, Arial, sans-serif" font-size="34" font-weight="500">Stack piu credibile, meno deformato e con gerarchia visiva migliore.</text>
+    <g fill="#18181B" stroke="#27272A">
+      <rect x="0" y="320" width="404" height="102" rx="24"/>
+      <rect x="0" y="450" width="404" height="102" rx="24"/>
+      <rect x="0" y="580" width="404" height="102" rx="24"/>
+    </g>
+    <text x="34" y="384" fill="#FAFAFA" font-family="Manrope, Arial, sans-serif" font-size="30" font-weight="700">Cover stack piu solido</text>
+    <text x="34" y="514" fill="#FAFAFA" font-family="Manrope, Arial, sans-serif" font-size="30" font-weight="700">Visual premium per pagina offerta</text>
+    <text x="34" y="644" fill="#FAFAFA" font-family="Manrope, Arial, sans-serif" font-size="30" font-weight="700">Maggiore nitidezza in export</text>
+    <text x="0" y="798" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="84" font-weight="900">€67,50</text>
+  </g>
+</svg>

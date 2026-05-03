@@ -1,0 +1,1 @@
+"""Payments compatibility namespace."""

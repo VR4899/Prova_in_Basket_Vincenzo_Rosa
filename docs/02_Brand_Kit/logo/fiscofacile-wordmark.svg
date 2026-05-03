@@ -1,0 +1,38 @@
+<svg width="1400" height="480" viewBox="0 0 1400 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="wordBg" x1="0" y1="0" x2="1400" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#09090B"/>
+      <stop offset="1" stop-color="#111114"/>
+    </linearGradient>
+    <radialGradient id="wordGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(220 240) rotate(90) scale(150)">
+      <stop stop-color="#CCFF00" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#CCFF00" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="wordGlobeClip">
+      <circle cx="224" cy="240" r="74"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1400" height="480" rx="40" fill="url(#wordBg)"/>
+  <rect x="22" y="22" width="1356" height="436" rx="28" stroke="#27272A" stroke-width="2"/>
+  <circle cx="224" cy="240" r="148" fill="url(#wordGlow)"/>
+  <circle cx="224" cy="240" r="136" fill="#0B0B0D" stroke="#CCFF00" stroke-width="4"/>
+  <circle cx="224" cy="240" r="118" stroke="#CCFF00" stroke-opacity="0.22" stroke-width="3"/>
+  <circle cx="224" cy="252" r="84" stroke="#CCFF00" stroke-opacity="0.18" stroke-width="3"/>
+  <g clip-path="url(#wordGlobeClip)">
+    <circle cx="224" cy="240" r="74" fill="#CCFF00" fill-opacity="0.05" stroke="#CCFF00" stroke-width="4"/>
+    <ellipse cx="224" cy="240" rx="38" ry="74" stroke="#CCFF00" stroke-opacity="0.52" stroke-width="3.2"/>
+    <ellipse cx="224" cy="240" rx="14" ry="74" stroke="#CCFF00" stroke-opacity="0.25" stroke-width="2.8"/>
+    <ellipse cx="224" cy="240" rx="74" ry="42" stroke="#CCFF00" stroke-opacity="0.46" stroke-width="3.2"/>
+    <ellipse cx="224" cy="240" rx="74" ry="16" stroke="#CCFF00" stroke-opacity="0.22" stroke-width="2.8"/>
+    <text x="224" y="266" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="88" font-weight="900" text-anchor="middle">€</text>
+  </g>
+
+  <g transform="translate(418 136)">
+    <text x="0" y="88" fill="#FAFAFA" font-family="Outfit, Arial, sans-serif" font-size="122" font-weight="900">Fisco</text>
+    <text x="300" y="88" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="122" font-weight="900">.</text>
+    <text x="366" y="88" fill="#A1A1AA" font-family="Outfit, Arial, sans-serif" font-size="122" font-weight="700">Facile</text>
+    <text x="4" y="148" fill="#CCFF00" font-family="Outfit, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="7">GUIDE FISCALI DIGITALI</text>
+    <text x="4" y="214" fill="#A1A1AA" font-family="Manrope, Arial, sans-serif" font-size="32" font-weight="500">Un'identita piu pulita, nitida e leggibile in ogni formato.</text>
+  </g>
+</svg>

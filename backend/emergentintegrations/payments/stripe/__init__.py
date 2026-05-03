@@ -1,0 +1,1 @@
+"""Stripe compatibility namespace."""

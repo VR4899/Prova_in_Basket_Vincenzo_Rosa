@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fisco Facile Brand Kit</title>
+  <style>
+    :root {
+      --bg: #09090b;
+      --card: #18181b;
+      --border: #27272a;
+      --text: #fafafa;
+      --muted: #a1a1aa;
+      --accent: #ccff00;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Outfit, Manrope, Arial, sans-serif;
+      background: radial-gradient(circle at top right, rgba(204,255,0,.08), transparent 22%), var(--bg);
+      color: var(--text);
+      padding: 48px 28px 64px;
+    }
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 56px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -.03em;
+    }
+    h1 .dot, .section-kicker { color: var(--accent); }
+    .lead {
+      color: var(--muted);
+      font-size: 20px;
+      max-width: 760px;
+      line-height: 1.6;
+      margin: 0 0 42px;
+    }
+    .section {
+      margin-top: 38px;
+    }
+    .section-kicker {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 18px;
+      overflow: hidden;
+    }
+    .card h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      font-weight: 800;
+    }
+    .card p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .thumb {
+      width: 100%;
+      border-radius: 18px;
+      background: #0b0b0d;
+      border: 1px solid rgba(204,255,0,.08);
+    }
+    .thumb.logo {
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      padding: 18px;
+    }
+    .thumb.wordmark {
+      aspect-ratio: 14 / 4.8;
+      object-fit: cover;
+    }
+    .thumb.graphic {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+    .thumb.burst {
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+    .thumb.mockup {
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+    }
+    .path {
+      margin-top: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      color: #71717a;
+      word-break: break-all;
+    }
+    @media (max-width: 900px) {
+      .grid, .grid.three { grid-template-columns: 1fr; }
+      h1 { font-size: 42px; }
+      .lead { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Fisco<span class="dot">.</span>Facile Brand Kit</h1>
+    <p class="lead">Kit visuale pronto all'uso con logo, grafiche decorative e mockup prodotto coerenti con il sito. Tutti i file sono SVG, quindi scalabili e riutilizzabili in landing, PDF, social o presentazioni.</p>
+
+    <section class="section">
+      <div class="section-kicker">Logo</div>
+      <div class="grid">
+        <article class="card">
+          <h2>Badge circolare</h2>
+          <p>Logo-emblema con globo e simbolo euro al centro.</p>
+          <img class="thumb logo" src="./logo/fiscofacile-logo-badge.svg" alt="Fisco Facile badge" />
+          <div class="path">logo/fiscofacile-logo-badge.svg</div>
+        </article>
+        <article class="card">
+          <h2>Wordmark</h2>
+          <p>Versione orizzontale per header, presentazioni e materiali commerciali.</p>
+          <img class="thumb wordmark" src="./logo/fiscofacile-wordmark.svg" alt="Fisco Facile wordmark" />
+          <div class="path">logo/fiscofacile-wordmark.svg</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-kicker">Grafiche</div>
+      <div class="grid">
+        <article class="card">
+          <h2>Hero Orbit Grid</h2>
+          <p>Background scenografico per landing, slide o copertine.</p>
+          <img class="thumb graphic" src="./grafiche/hero-orbit-grid.svg" alt="Hero orbit grid" />
+          <div class="path">grafiche/hero-orbit-grid.svg</div>
+        </article>
+        <article class="card">
+          <h2>Lime Burst Panel</h2>
+          <p>Elemento decorativo quadrato, utile per post e pannelli promozionali.</p>
+          <img class="thumb burst" src="./grafiche/lime-burst-panel.svg" alt="Lime burst panel" />
+          <div class="path">grafiche/lime-burst-panel.svg</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-kicker">Mockup</div>
+      <div class="grid three">
+        <article class="card">
+          <h2>Privati</h2>
+          <p>Mockup visuale del pacchetto dedicato a utenti e famiglie.</p>
+          <img class="thumb mockup" src="./mockup/pacchetto-privati-mockup.svg" alt="Mockup pacchetto privati" />
+          <div class="path">mockup/pacchetto-privati-mockup.svg</div>
+        </article>
+        <article class="card">
+          <h2>Aziende</h2>
+          <p>Mockup con tono più professionale per P.IVA e imprese.</p>
+          <img class="thumb mockup" src="./mockup/pacchetto-aziende-mockup.svg" alt="Mockup pacchetto aziende" />
+          <div class="path">mockup/pacchetto-aziende-mockup.svg</div>
+        </article>
+        <article class="card">
+          <h2>Bundle</h2>
+          <p>Visual hero per l’offerta completa delle 28 guide.</p>
+          <img class="thumb mockup" src="./mockup/bundle-completo-mockup.svg" alt="Mockup bundle completo" />
+          <div class="path">mockup/bundle-completo-mockup.svg</div>
+        </article>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
