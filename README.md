@@ -51,6 +51,20 @@ HOST=127.0.0.1 PORT=3000 BROWSER=none npm start
 - Admin: `http://127.0.0.1:3000/admin`
 - API: `http://127.0.0.1:8000`
 
+## Link pubblico
+
+Per ottenere un link pubblico stabile della landing:
+
+1. pubblica `frontend/` su Vercel
+2. pubblica `backend/` su Render
+3. imposta nel frontend `REACT_APP_BACKEND_URL` con l'URL pubblico del backend
+4. imposta nel backend `PUBLIC_SITE_URL` e `CORS_ORIGINS` con l'URL pubblico del frontend
+
+In questa cartella trovi anche:
+
+- `render.yaml` per il deploy backend su Render
+- `docs/00_Link_Pubblico_Vercel_Render.md` con i passaggi rapidi
+
 ## Configurazione ambiente
 
 1. Copia i file esempio:

@@ -1,0 +1,51 @@
+services:
+  - type: web
+    name: prova-in-basket-vincenzo-rosa-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.3
+      - key: MONGO_URL
+        sync: false
+      - key: DB_NAME
+        value: fisco_facile
+      - key: PUBLIC_SITE_URL
+        sync: false
+      - key: SUPPORT_EMAIL
+        value: supporto@example.com
+      - key: COMPANY_LEGAL_NAME
+        value: Fisco Facile SRL
+      - key: VAT_ID
+        value: IT00000000000
+      - key: CORS_ORIGINS
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD_HASH
+        sync: false
+      - key: GOOGLE_SHEETS_SPREADSHEET_ID
+        sync: false
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: STRIPE_MOCK
+        value: "false"
+      - key: STRIPE_API_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: ALLOW_TEST_BYPASS
+        value: "false"
+      - key: TEST_BYPASS_LOCAL_ONLY
+        value: "true"
+      - key: CUSTOMER_TEST_ACCESS_LOCAL_ONLY
+        value: "true"
+      - key: RESEND_API_KEY
+        sync: false
+      - key: SENDER_EMAIL
+        sync: false
+      - key: EMAIL_DELIVERY_MODE
+        value: auto
