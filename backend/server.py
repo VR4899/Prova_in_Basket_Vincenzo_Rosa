@@ -44,6 +44,29 @@ def _env_int(name: str, default: int, minimum: int = 1) -> int:
     return max(value, minimum)
 
 
+def _parse_csv_env(raw: str) -> List[str]:
+    return [item.strip().rstrip("/") for item in raw.split(",") if item.strip()]
+
+
+def _build_cors_origins() -> List[str]:
+    origins = {
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    }
+    origins.update(_parse_csv_env(os.environ.get("CORS_ORIGINS", "")))
+    public_site_url = os.environ.get("PUBLIC_SITE_URL", "").strip().rstrip("/")
+    if public_site_url:
+        origins.add(public_site_url)
+    return sorted(origins)
+
+
+def _cors_origin_regex() -> str:
+    return (
+        os.environ.get("CORS_ALLOW_ORIGIN_REGEX", "").strip()
+        or r"https://.*\.vercel\.app"
+    )
+
+
 mongo_url = os.environ["MONGO_URL"]
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ["DB_NAME"]]
@@ -1878,9 +1901,12 @@ async def customer_orders(
 app.include_router(api_router)
 
 app.add_middleware(
-    CORSMiddleware, allow_credentials=True,
-    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
-    allow_methods=["*"], allow_headers=["*"],
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_origins=_build_cors_origins(),
+    allow_origin_regex=_cors_origin_regex(),
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 logging.basicConfig(level=logging.INFO,
