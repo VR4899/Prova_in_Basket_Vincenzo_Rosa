@@ -13,6 +13,7 @@ import {
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
+const ADMIN_LOGIN_TIMEOUT_MS = 15000;
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -35,12 +36,20 @@ export default function AdminLogin() {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post(`${API}/admin/login`, { email, password });
+      const { data } = await axios.post(
+        `${API}/admin/login`,
+        { email, password },
+        { timeout: ADMIN_LOGIN_TIMEOUT_MS },
+      );
       persistAdminSession(data.token, data.expires_at);
       toast.success("Accesso effettuato.");
       navigate("/admin/dashboard");
     } catch (err) {
-      if (err.response?.status === 429) {
+      if (err.code === "ECONNABORTED") {
+        toast.error("Il backend impiega troppo a rispondere. Se Render si sta riattivando, attendi un minuto e riprova.");
+      } else if (!err.response) {
+        toast.error("Il backend pubblico non e raggiungibile al momento.");
+      } else if (err.response?.status === 429) {
         toast.error("Troppi tentativi. Aspetta qualche minuto prima di riprovare.");
       } else {
         toast.error("Email o password errata.");
